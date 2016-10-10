@@ -18,6 +18,7 @@ public:
 
 	b2Body* GetPhysics();
 
+
 	int GetType();
 
 protected:
@@ -31,5 +32,8 @@ protected:
 	b2Body* PhysicsBody;
 	
 	int ObjectType;
+
+	void AddUpwardsVelocity(float _upwards);
+	void AddSidewaysForce(float _sideForce);
 };
 

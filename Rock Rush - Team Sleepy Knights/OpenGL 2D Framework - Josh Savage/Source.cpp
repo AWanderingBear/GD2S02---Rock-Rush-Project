@@ -1,3 +1,11 @@
+//NOTES TO JOSH:
+/*
+Special Meteors and normal meteors are the exact same thing, 
+but normal meteors have type 3 and special are type 4. You shouldnt be able to pick up more than one
+meteor at a time. Both have spawn functions in the Game class, hopefully this should get you started 
+on being able to do stuff with them.
+*/
+
 //Include windows first if needed because the SDK is dumb
 #ifdef _WIN32
 #include <Windows.h>
@@ -19,16 +27,21 @@
 #include "Player.h"
 
 //Global Variables
-
 std::map<std::string, GLuint> ProgramManager;
 
 Game* Test;
 
 
 GLFWwindow* _pWindow;
-Camera* gCamera;
 
 bool keys[1024];
+
+//Checks to see if these keys are held; in our game we only ever want to tap these,
+//So we'll disallow these keys to be sent through until they have been released.
+bool upReleased;
+bool downReleased;
+bool uReleased;
+bool jReleased;
 
 double mousex = 0, mousey = 0;
 
@@ -50,6 +63,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		keys[key] = false;
 }
 
+//Mouse Button Handling
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
 
 	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
@@ -62,6 +76,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 	}
 }
 
+//Cursor position tracking
 void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos) {
 
 	mousex = xpos;
@@ -76,10 +91,10 @@ void VertexInit() {
 	Test->Initialise();
 }
 
+//Keyboard Input handling
 void HandleInput() {
 
 	Camera* CurrentCamera = Test->GetCurrentScene()->GetCamera();
-	Player* CurrentPlayer = Test->GetCurrentScene()->GetPlayer(0);	//FIGURE THIS OUT LATER
 
 	if (keys[GLFW_KEY_W])
 		CurrentCamera->Movement(GLFW_KEY_W);
@@ -90,16 +105,59 @@ void HandleInput() {
 	if (keys[GLFW_KEY_D])
 		CurrentCamera->Movement(GLFW_KEY_D);
 
-	if (keys[GLFW_KEY_UP])
-		CurrentPlayer->Move(GLFW_KEY_UP);
-	if (keys[GLFW_KEY_DOWN])
-		CurrentPlayer->Move(GLFW_KEY_DOWN);
+
+	if (keys[GLFW_KEY_UP] && upReleased)
+	{
+		Test->HandleKeyInput(GLFW_KEY_UP);
+		upReleased = false;
+	}
+	else if (!keys[GLFW_KEY_UP])
+	{
+		upReleased = true;
+	}
+
+	if (keys[GLFW_KEY_DOWN] && downReleased)
+	{
+		Test->HandleKeyInput(GLFW_KEY_DOWN);
+		downReleased = false;
+	}
+	else if (!keys[GLFW_KEY_DOWN])
+	{
+		downReleased = true;
+	}
+
 	if (keys[GLFW_KEY_LEFT])
-		CurrentPlayer->Move(GLFW_KEY_LEFT);
+		Test->HandleKeyInput(GLFW_KEY_LEFT);
 	if (keys[GLFW_KEY_RIGHT])
-		CurrentPlayer->Move(GLFW_KEY_RIGHT);
+		Test->HandleKeyInput(GLFW_KEY_RIGHT);
+
+	if (keys[GLFW_KEY_U] && uReleased)
+	{
+		Test->HandleKeyInput(GLFW_KEY_U);
+		uReleased = false;
+	}
+	else if (!keys[GLFW_KEY_U])
+	{
+		uReleased = true;
+	}
+
+	if (keys[GLFW_KEY_J] && jReleased)
+	{
+		Test->HandleKeyInput(GLFW_KEY_J);
+		jReleased = false;
+	}
+	else if (!keys[GLFW_KEY_J])
+	{
+		jReleased = true;
+	}
+	if (keys[GLFW_KEY_H])
+		Test->HandleKeyInput(GLFW_KEY_H);
+	if (keys[GLFW_KEY_K])
+		Test->HandleKeyInput(GLFW_KEY_K);
+
 }
 
+//Updates
 void UpdateMain() {
 
 	HandleInput();
@@ -110,7 +168,6 @@ void UpdateMain() {
 //Program Entry Point
 int main() 
 {
-
 	//+++ Window Creation +++
 	//Window Initialisation for GLFW
 	glfwInit();
@@ -156,7 +213,7 @@ int main()
 	//+++ Input Setup +++
 	glfwSetKeyCallback(_pWindow, key_callback);
 	glfwSetCursorPosCallback(_pWindow, cursor_pos_callback);
-	glfwSetMouseButtonCallback(_pWindow, mouse_button_callback);
+//	glfwSetMouseButtonCallback(_pWindow, mouse_button_callback);	//WE NEED TO ENABLE THIS FOR MOUSE CLICKS. It was a cheat way to make objects not selectable.
 
 	VertexInit();
 
@@ -179,7 +236,7 @@ int main()
 	//+++ Clean Up +++
 	glfwTerminate();
 
-	delete gCamera, Test;
+	delete Test;
 
 	return 0;
 }

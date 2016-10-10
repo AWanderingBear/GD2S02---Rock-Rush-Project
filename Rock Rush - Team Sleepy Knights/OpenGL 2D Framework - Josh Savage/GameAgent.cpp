@@ -5,7 +5,7 @@
 GameAgent::GameAgent(GLuint Shader, std::string _strTexture,
 	std::vector<GLfloat> Vertices, std::vector<GLuint> Elements,
 	glm::vec3 Position, float Rotation, Camera* Camera, b2Body* Physics, int Type)
-	//Int value type, 0 = ground, 1 = shootable, 2 = environment, 3 = enemy
+	//Int value type, 0 = ground, 1 = shootable, 2 = environment, 3 = Meteor, 4 = player
 {
 	m_Position = Position;
 	m_Rotation = Rotation;
@@ -32,7 +32,7 @@ GameAgent::~GameAgent()
 
 }
 
-void GameAgent::Update()
+void GameAgent::Update()	//A - I think this automatically updates the OpenGL position based on the box2D body position??
 {
 	if (PhysicsBody != nullptr) {
 
@@ -65,6 +65,23 @@ void GameAgent::Render()
 b2Body * GameAgent::GetPhysics()
 {
 	return PhysicsBody;
+}
+
+void GameAgent::AddUpwardsVelocity(float _upwards)
+{	//Directly changes the bodys velocity to make jumps jumpier.
+	//Stupid fucking code cant fucking switch between fucking vec2 and b2vec2 fucking hell.
+	b2Vec2 newVelocity = PhysicsBody->GetLinearVelocity();	//Gets the old
+	newVelocity.y = -_upwards;
+	PhysicsBody->ApplyLinearImpulseToCenter(newVelocity, true);
+	PhysicsBody->SetLinearVelocity(newVelocity);
+}
+
+void GameAgent::AddSidewaysForce(float _sideForce)
+{
+	b2Vec2 newVelocity = PhysicsBody->GetLinearVelocity();
+	newVelocity.x = _sideForce;
+	PhysicsBody->SetLinearVelocity(newVelocity);
+	PhysicsBody->SetLinearDamping(0.5f);
 }
 
 int GameAgent::GetType()

@@ -12,7 +12,7 @@ Scene::Scene(Camera* Camera, Game* Game, int TotalFirable, int TotalPigs)
 	World = new b2World(gravity);
 	MaxFired = TotalFirable;
 	GameInstance = Game;
-	EnemyCount = TotalPigs;
+	MeteorCount = TotalPigs;
 }
 
 Scene::~Scene()
@@ -27,7 +27,7 @@ void Scene::Update()
 	if (FiredCount >= MaxFired) {
 
 		if (SwitchCount > 300) {
-			
+
 			GameInstance->NextScene();
 		}
 		else {
@@ -44,27 +44,24 @@ void Scene::Update()
 		Agent->Render();
 	}
 
-	for (int i = 0; i < (int)Enemies.size(); i++) {
+	for (int i = 0; i < (int)NormalMeteors.size(); i++) {
 
-		Enemy* Agent = Enemies[i];
+		Meteor* Agent = NormalMeteors[i];
 
-		bool Alive = Agent->Update();
+		Agent->Update();
 
-		if (!Alive) {
-			EnemyCount--;
-			if (EnemyCount <= 0) {
-
-				GameInstance->NextScene();
-			}
-
-			Enemies.erase(Enemies.begin() + i);
-			World->DestroyBody(Agent->GetPhysics());
-			delete Agent;
-			break;
-		}
 		Agent->Render();
-
 	}
+
+	for (int i = 0; i < (int)SpecialMeteors.size(); i++) {
+
+		SpecialMeteor* Agent = SpecialMeteors[i];
+
+		Agent->Update();
+
+		Agent->Render();
+	}
+
 
 	for (int i = 0; i < (int)Shootables.size(); i++) {
 
@@ -114,7 +111,7 @@ void Scene::Update()
 		Agent->Render();
 	}
 
-	for (int i = 0; i < (int)Players.size(); i++) 
+	for (int i = 0; i < (int)Players.size(); i++)
 	{
 		Player* Agent = Players[i];
 
@@ -141,28 +138,20 @@ void Scene::AddRailGun(b2Body * Railgun, int index)
 	RailgunPieces[index] = Railgun;
 }
 
-void Scene::AddEnemy(Enemy * Adding)
+void Scene::AddMeteor(Meteor * Adding)
 {
-	Enemies.push_back(Adding);
+	NormalMeteors.push_back(Adding);
+}
+
+void Scene::AddSpecialMeteor(SpecialMeteor * Adding)
+{
+	SpecialMeteors.push_back(Adding);
 }
 
 void Scene::AddPlayer(Player* Adding)
 {
 	Players.push_back(Adding);
 }
-
-//std::vector<Player>GetPlayer()
-//{
-//	return Players[];
-//}
-
-//Player * Scene::GetPlayer()
-//{
-//	for (int i = 0; i < Players.size(); i++)
-//	{
-//		return Players[i];
-//	}
-//}
 
 Player * Scene::GetPlayer(int i)
 {
@@ -234,12 +223,27 @@ void Scene::HandleMove(glm::vec2 mousePos)
 	}
 }
 
-void Scene::HandleKeyInput()
+void Scene::HandleKeyInput(int _key)
 {
-	for (unsigned int i = 0; i < Players.size(); i++)
-	{
-		//Players[i]->Move(GLFW_KEY_UP);
-	}
+	//Player 0 movement
+	if (_key == GLFW_KEY_UP)
+		Players[0]->Move(GLFW_KEY_UP);
+	if (_key == GLFW_KEY_DOWN)
+		Players[0]->Move(GLFW_KEY_DOWN);
+	if (_key == GLFW_KEY_LEFT)
+		Players[0]->Move(GLFW_KEY_LEFT);
+	if (_key == GLFW_KEY_RIGHT)
+		Players[0]->Move(GLFW_KEY_RIGHT);
+
+	//Player 1 movement
+	if (_key == GLFW_KEY_U)
+		Players[1]->Move(GLFW_KEY_UP);
+	if (_key == GLFW_KEY_J)
+		Players[1]->Move(GLFW_KEY_DOWN);
+	if (_key == GLFW_KEY_H)
+		Players[1]->Move(GLFW_KEY_LEFT);
+	if (_key == GLFW_KEY_K)
+		Players[1]->Move(GLFW_KEY_RIGHT);
 }
 
 void Scene::SetLaunchJoint(b2Joint * joint, int index)

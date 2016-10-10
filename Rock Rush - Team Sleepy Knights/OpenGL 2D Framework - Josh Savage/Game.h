@@ -6,7 +6,6 @@
 //Local Includes
 #include "Scene.h"
 #include "ShaderLoader.h"
-#include "Player.h"
 
 class Game
 {
@@ -26,18 +25,30 @@ public:
 	void HandleClick(glm::vec2 mousePos);
 	void HandleRelease();
 	void HandleMove(glm::vec2 mousePos);
-	void HandleKeyInput();
+	void HandleKeyInput(int _key);
+
+
 
 private:
 
+	GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
+	GLfloat lastFrame = 0.0f;  	// Time of last frame
+	float spawnNormalTimer = 0.0f;
+
 	Scene* LevelOne();
-	Scene* LevelTwo();
+	//Scene* LevelTwo();
 
 	int CurrentScene = 0;
+
+
 
 	std::vector<Scene*> Scenes;
 	std::map<std::string, GLuint> ProgramManager;
 	ShaderLoader ProgramCreator;
 	GLFWwindow* m_Window;
+
+	void SpawnNormalMeteor();
+	void SpawnSpecialMeteor();
+
 };
 

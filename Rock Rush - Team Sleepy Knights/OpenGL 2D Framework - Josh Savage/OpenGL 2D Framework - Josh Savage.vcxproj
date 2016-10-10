@@ -156,9 +156,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Meteor.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Shootable.cpp" />
+    <ClCompile Include="SpecialMeteor.cpp" />
     <ClCompile Include="Util.h" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameAgent.cpp" />
@@ -170,8 +171,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemyCollisionHandler.h" />
+    <ClInclude Include="Meteor.h" />
+    <ClInclude Include="MeteorCollisionHandler.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameAgent.h" />
     <ClInclude Include="Model.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="Shootable.h" />
+    <ClInclude Include="SpecialMeteor.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>

@@ -6,8 +6,9 @@
 //Local Includes
 #include "GameAgent.h"
 #include "Shootable.h"
-#include "Enemy.h"
+#include "Meteor.h"
 #include "Player.h"
+#include "SpecialMeteor.h"
 
 class Game;
 
@@ -22,8 +23,11 @@ public:
 	void AddGameAgent(GameAgent* Adding);
 	void AddShootable(Shootable* Adding);
 	void AddRailGun(b2Body* Railgun, int index);
-	void AddEnemy(Enemy* Adding);
+	void AddMeteor(Meteor* Adding);
+	void AddSpecialMeteor(SpecialMeteor* Adding);
 	void AddPlayer(Player* Adding);
+
+
 
 	Player* GetPlayer(int player);
 	Camera* GetCamera();
@@ -33,7 +37,7 @@ public:
 	void HandleClick(glm::vec2 mousePos);
 	void HandleRelease();
 	void HandleMove(glm::vec2 mousePos);
-	void HandleKeyInput();
+	void HandleKeyInput(int _key);
 
 	//std::vector<Player>GetPlayer();
 
@@ -61,13 +65,17 @@ private:
 	//Firable
 	int FiredCount = 0;
 	int MaxFired;
-	//Enemies
-	int EnemyCount;
-	std::vector<Enemy*> Enemies;
 
-	/*Player* pPlayer;*/
+	//Meteors
+	int MeteorCount;
+	std::vector<Meteor*> NormalMeteors;
+	std::vector<SpecialMeteor*> SpecialMeteors; //I can't be bothered learning the logic so copying everything.
+
+	//Players
+	std::vector<Player*> Players;
+
 	Game* GameInstance;
 	int SwitchCount;
-	std::vector<Player*> Players;
+
 };
 

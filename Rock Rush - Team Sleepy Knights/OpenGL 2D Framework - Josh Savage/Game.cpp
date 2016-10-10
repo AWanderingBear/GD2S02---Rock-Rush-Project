@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "Shapes.h"
-#include "EnemyCollisionHandler.h"
+#include "MeteorCollisionHandler.h"
+
+#include <ctime>	//For seeding the random number generator for meteor positions
 
 //REMEMBER ME 
 // Box2D uses different units to GL
@@ -10,6 +12,8 @@
 Game::Game(GLFWwindow * Window)
 {
 	m_Window = Window;
+
+	srand(time(NULL));	//Something something seed planting.
 }
 
 Game::~Game()
@@ -18,14 +22,12 @@ Game::~Game()
 
 Scene * Game::LevelOne()
 {
-	//This method of creation of horrific and should be handled in the constructor. Note for next time. 
+	//This method of creation is* horrific and should be handled in the constructor. Note for next time. 
 
 	//Level One
 	Camera* GameCamera = new Camera(600.0f, glm::vec3(-150.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), m_Window);
 	Scene* LevelOne = new Scene(GameCamera, this, 3, 2);
-	LevelOne->GetWorld()->SetContactListener(new EnemyCollisionHandler());
-
-
+	LevelOne->GetWorld()->SetContactListener(new MeteorCollisionHandler());
 
 	// Define the ground
 	b2BodyDef mainPlatformBodyDef;
@@ -40,6 +42,7 @@ Scene * Game::LevelOne()
 	b2FixtureDef mainPlatformFixture;
 	mainPlatformFixture.shape = &mainPlatformBox;
 	mainPlatformFixture.userData = mainPlatformBody;
+	mainPlatformFixture.friction = 0.0f;
 	mainPlatformBody->CreateFixture(&mainPlatformFixture);
 
 
@@ -75,41 +78,37 @@ Scene * Game::LevelOne()
 	rightPlatformBody->CreateFixture(&rightPlatformFixture);
 
 	//Define the Box
-	b2BodyDef bird1Def;
-	bird1Def.type = b2_dynamicBody;
-	bird1Def.position.Set(9.0f, 20.0f);	//Cannot set this to negative numbers D:
-;
-	b2Body* body2 = LevelOne->GetWorld()->CreateBody(&bird1Def);
-	bird1Def.position.Set(15.0f, 22.0f);
+	b2BodyDef playerZeroBodyDef;
+	playerZeroBodyDef.type = b2_dynamicBody;
+	playerZeroBodyDef.position.Set(9.0f, 20.0f);	//Cannot set this to negative numbers D:
+	playerZeroBodyDef.fixedRotation = true;
 
-	b2BodyDef bird3Def;
-	bird3Def.type = b2_dynamicBody;
-	bird3Def.position.Set(33.0f, 20.0f);	//Cannot set this to negative numbers D:
-	b2Body* body3 = LevelOne->GetWorld()->CreateBody(&bird3Def);
+	b2Body* playerZeroBody = LevelOne->GetWorld()->CreateBody(&playerZeroBodyDef);
 
-
+	b2BodyDef playerOneBodyDef;
+	playerOneBodyDef.type = b2_dynamicBody;
+	playerOneBodyDef.position.Set(33.0f, 20.0f);	//Cannot set this to negative numbers D:
+	playerOneBodyDef.fixedRotation = true;
+	b2Body* playerOneBody = LevelOne->GetWorld()->CreateBody(&playerOneBodyDef);
 	
-	Player* pPlayer = new Player(ProgramManager["Ortho"], "Assets/Textures/BombBall.png", SmallSquareVertices, Indices,
-		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, body2 /*,1 for collision (Shootables)*/);
-
-
+	Player* pPlayer = new Player(ProgramManager["Ortho"], "Assets/Textures/awesomeface.png", SmallSquareVertices, Indices,
+		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerZeroBody /*,1 for collision (Shootables)*/);
 
 	Player* bPlayer = new Player(ProgramManager["Ortho"], "Assets/Textures/hexagon.png", SmallSquareVertices, Indices,
-		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, body3);
-
+		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerOneBody);
 
 
 	//Define Shape
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(1.0f, 1.0f);
-	b2CircleShape Circle;
-	Circle.m_radius = 1.0f;
 	//Add Fixture
 	b2FixtureDef fixtureDefBox;
 	fixtureDefBox.shape = &dynamicBox;
 	// Set the box density to be non-zero, so it will be dynamic.
 	fixtureDefBox.density = 5.0f;
 
+	b2CircleShape Circle;
+	Circle.m_radius = 1.0f;
 	b2FixtureDef fixtureDefCircle;
 	fixtureDefCircle.shape = &Circle;
 	fixtureDefCircle.density = 10.0f;
@@ -125,19 +124,17 @@ Scene * Game::LevelOne()
 
 	b2PolygonShape shape;
 	shape.Set(vertices, 6);
+
 	b2FixtureDef fixtureDefTriangle;
 	fixtureDefTriangle.shape = &shape;
 	fixtureDefTriangle.density = 5.0f;
 
 	//Add fixture to the body
 
-	//I DONT THINK THAT THE PLAYERS SHOULD BE INSTANTIATED BEFORE THIS STUFF BUT #Yolo?
-	fixtureDefCircle.userData = pPlayer;
-	body2->CreateFixture(&fixtureDefCircle);
-	fixtureDefTriangle.userData = bPlayer;
-	body3->CreateFixture(&fixtureDefTriangle);
-
-
+	fixtureDefBox.userData = pPlayer;
+	playerZeroBody->CreateFixture(&fixtureDefBox);
+	fixtureDefBox.userData = bPlayer;
+	playerOneBody->CreateFixture(&fixtureDefBox);
 
 	//Background
 	LevelOne->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BackgroundSky.jpg", BackgroundVertices, Indices, 
@@ -149,9 +146,8 @@ Scene * Game::LevelOne()
 	LevelOne->AddGameAgent(rightPlatformAgent);
 
 	////Player Characters
-
 	LevelOne->AddPlayer(pPlayer);
-	LevelOne->AddPlayer(bPlayer);
+	LevelOne->AddPlayer(bPlayer); 
 
 	return LevelOne;
 }
@@ -161,11 +157,25 @@ void Game::Initialise()
 
 	ProgramManager["Ortho"] = ProgramCreator.CreateShader("Shaders/Vertex/OrthoVertexShader.vert", "Shaders/Fragment/TextureFragmentShader.frag");
 
-	Scenes.push_back(LevelOne());;
+	Scenes.push_back(LevelOne());
+
+	SpawnSpecialMeteor();
 }
 
 void Game::Update()
 {
+	//Time normalization
+	GLfloat currentFrame = glfwGetTime();
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
+
+	spawnNormalTimer -= deltaTime;
+	if (spawnNormalTimer <= 0.0f)
+	{
+		SpawnNormalMeteor();
+		spawnNormalTimer += 3.0f +  static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 5.0f - 3.0f));  //Spawns between 3 and 5 seconds. To change change both 3s or the 5.
+	}
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//Setting Clear color
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -173,6 +183,10 @@ void Game::Update()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	Scenes[CurrentScene]->Update();
+
+
+	//Check if there is a special meteor, if not
+	//SpawnSpecialMeteor();
 }
 
 void Game::AddScene(Scene* Adding)
@@ -189,7 +203,6 @@ void Game::NextScene()
 {
 
 	if (!(CurrentScene == (int) Scenes.size() - 1)) {
-
 		CurrentScene += 1;
 	}
 }
@@ -211,20 +224,77 @@ void Game::HandleClick(glm::vec2 mousePos)
 
 void Game::HandleRelease()
 {
-
 	GetCurrentScene()->HandleRelease();
 }
 
 void Game::HandleMove(glm::vec2 mousePos)
 {
-	
 	GetCurrentScene()->HandleMove(mousePos);
 }
 
-void Game::HandleKeyInput()
+void Game::HandleKeyInput(int _key)
 {
-	
-	GetCurrentScene()->HandleKeyInput();
+	int k = _key;
+	GetCurrentScene()->HandleKeyInput(_key);
 }
 
+void Game::SpawnNormalMeteor()
+{
+	Scene* currentScene = GetCurrentScene();
+
+	float normx = 6.5f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 30.0f - 6.5f));
+
+	//Define the Box
+	b2BodyDef meteorBodyDef;
+	meteorBodyDef.type = b2_dynamicBody;
+	meteorBodyDef.position.Set(normx, 0.0f);
+
+	b2Body* meteorBody = currentScene->GetWorld()->CreateBody(&meteorBodyDef);
+
+	Meteor* meteor = new Meteor(ProgramManager["Ortho"], "Assets/Textures/BombBall.png", SmallSquareVertices, Indices,
+		glm::vec3(0.0, 0.0, 0.0), 0, currentScene->GetCamera(), meteorBody /*,1 for collision (Shootables)*/);
+
+	b2CircleShape Circle;
+	Circle.m_radius = 1.0f;
+
+	b2FixtureDef fixtureDefCircle;
+	fixtureDefCircle.shape = &Circle;
+	fixtureDefCircle.density = 10.0f;
+
+	fixtureDefCircle.userData = meteor;
+	meteorBody->CreateFixture(&fixtureDefCircle);
+
+	//Change to meteor
+	currentScene->AddMeteor(meteor);
+}
+
+void Game::SpawnSpecialMeteor()
+{
+	Scene* currentScene = GetCurrentScene();
+
+	float specialx = 6.5f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 30.0f - 6.5f));
+
+	//Define the Box
+	b2BodyDef meteorBodyDef;
+	meteorBodyDef.type = b2_dynamicBody;
+	meteorBodyDef.position.Set(specialx, 0.0f);
+
+	b2Body* meteorBody = currentScene->GetWorld()->CreateBody(&meteorBodyDef);
+
+	SpecialMeteor* specialmeteor = new SpecialMeteor(ProgramManager["Ortho"], "Assets/Textures/robot.png", SmallSquareVertices, Indices,
+		glm::vec3(0.0, 0.0, 0.0), 0, currentScene->GetCamera(), meteorBody /*,1 for collision (Shootables)*/);
+
+	b2CircleShape Circle;
+	Circle.m_radius = 1.0f;
+
+	b2FixtureDef fixtureDefCircle;
+	fixtureDefCircle.shape = &Circle;
+	fixtureDefCircle.density = 10.0f;
+
+	fixtureDefCircle.userData = specialmeteor;
+	meteorBody->CreateFixture(&fixtureDefCircle);
+
+	//Change to meteor
+	currentScene->AddSpecialMeteor(specialmeteor);
+}
 
