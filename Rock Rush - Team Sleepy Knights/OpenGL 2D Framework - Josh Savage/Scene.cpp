@@ -48,9 +48,20 @@ void Scene::Update()
 
 		Meteor* Agent = NormalMeteors[i];
 
-		Agent->Update();
+		if (Agent != nullptr) {
 
-		Agent->Render();
+			bool Alive = Agent->Update(m_Camera->getDeltaTime());
+			if (Alive) {
+
+				Agent->Render();
+			}
+			else {
+
+				NormalMeteors.erase(NormalMeteors.begin() + i);
+				World->DestroyBody(Agent->GetPhysics());
+				delete Agent;
+			}
+		}
 	}
 
 	for (int i = 0; i < (int)SpecialMeteors.size(); i++) {
@@ -58,56 +69,6 @@ void Scene::Update()
 		SpecialMeteor* Agent = SpecialMeteors[i];
 
 		Agent->Update();
-
-		Agent->Render();
-	}
-
-
-	for (int i = 0; i < (int)Shootables.size(); i++) {
-
-		Shootable* Agent = Shootables[i];
-
-		int ReturnCode = Agent->Update();
-
-		//if (ReturnCode == 1 && Firing == nullptr) {
-
-		//	Firing = Agent;
-
-		//	//Jointing the object
-		//	b2DistanceJointDef jd;
-		//	jd.frequencyHz = 0.5f;
-		//	jd.dampingRatio = 0.0f;
-
-		//	jd.bodyA = RailgunPieces[0];
-		//	jd.localAnchorA.Set(10.0, 1.5);
-		//	jd.bodyB = Agent->GetPhysics();
-		//	jd.length = 4.0f;
-
-		//	//LaunchJoint[0] = World->CreateJoint(&jd);
-
-		//	jd.bodyA = RailgunPieces[1];
-		//	jd.localAnchorA.Set(10.0, -1.5);
-		//	LaunchJoint[1] = World->CreateJoint(&jd);
-
-		//	FiredCount += 1;
-		//}
-		//else if (ReturnCode == 2 && Firing != nullptr) {
-
-		//	World->DestroyJoint(LaunchJoint[0]);
-		//	World->DestroyJoint(LaunchJoint[1]);
-		//	Firing = nullptr;
-		//	HandleRelease();
-		//}
-
-		//else if (ReturnCode == 3) {
-
-		//	Shootables.erase(Shootables.begin() + i);
-		//	World->DestroyBody(Agent->GetPhysics());
-		//	m_mouseJoint = nullptr;
-		//	delete Agent;
-		//	break;
-		//}
-
 		Agent->Render();
 	}
 
@@ -226,23 +187,23 @@ void Scene::HandleMove(glm::vec2 mousePos)
 void Scene::HandleKeyInput(int _key)
 {
 	//Player 0 movement
-	if (_key == GLFW_KEY_UP)
+	if (_key == GLFW_KEY_W)
 		Players[0]->Move(GLFW_KEY_UP);
-	if (_key == GLFW_KEY_DOWN)
+	if (_key == GLFW_KEY_S)
 		Players[0]->Move(GLFW_KEY_DOWN);
-	if (_key == GLFW_KEY_LEFT)
+	if (_key == GLFW_KEY_A)
 		Players[0]->Move(GLFW_KEY_LEFT);
-	if (_key == GLFW_KEY_RIGHT)
+	if (_key == GLFW_KEY_D)
 		Players[0]->Move(GLFW_KEY_RIGHT);
 
 	//Player 1 movement
-	if (_key == GLFW_KEY_U)
+	if (_key == GLFW_KEY_I)
 		Players[1]->Move(GLFW_KEY_UP);
-	if (_key == GLFW_KEY_J)
-		Players[1]->Move(GLFW_KEY_DOWN);
-	if (_key == GLFW_KEY_H)
-		Players[1]->Move(GLFW_KEY_LEFT);
 	if (_key == GLFW_KEY_K)
+		Players[1]->Move(GLFW_KEY_DOWN);
+	if (_key == GLFW_KEY_J)
+		Players[1]->Move(GLFW_KEY_LEFT);
+	if (_key == GLFW_KEY_L)
 		Players[1]->Move(GLFW_KEY_RIGHT);
 }
 

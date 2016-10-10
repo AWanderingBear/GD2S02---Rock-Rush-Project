@@ -52,7 +52,7 @@ void Player::Move(int key)
 		GameAgent::AddSidewaysForce(NormalizedSpeed);
 	}
 
-	if (key == GLFW_KEY_DOWN) {
+	if (key == GLFW_KEY_DOWN) { 
 
 		if (currentlyHolding != nullptr)	//Player is already holding something, we throw it away.
 		{

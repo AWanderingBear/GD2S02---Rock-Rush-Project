@@ -38,7 +38,7 @@ Scene * Game::LevelOne()
 		glm::vec3(520, 600, 0), 0, GameCamera, mainPlatformBody, 0);	//DOES affect objects position, but y is oposite
 	//Shape the physics body
 	b2PolygonShape mainPlatformBox;
-	mainPlatformBox.SetAsBox(520.0f, 1.0f);		//Doesnt affect the way the object looks. I have no idea if this is right.
+	mainPlatformBox.SetAsBox(15.36f, 1.0f);		//Doesnt affect the way the object looks. I have no idea if this is right.
 	b2FixtureDef mainPlatformFixture;
 	mainPlatformFixture.shape = &mainPlatformBox;
 	mainPlatformFixture.userData = mainPlatformBody;
@@ -48,14 +48,14 @@ Scene * Game::LevelOne()
 
 	// Define the left starting platform.
 	b2BodyDef leftPlatformBodyDef;
-	leftPlatformBodyDef.position.Set(20.0f, 24.0f); //*25			//Doesn't affect the way the object looks.
+	leftPlatformBodyDef.position.Set(-3.2f, 20.0f); //*25			//Doesn't affect the way the object looks.
 	leftPlatformBodyDef.type = b2_staticBody;
 	b2Body* leftPlatformBody = LevelOne->GetWorld()->CreateBody(&leftPlatformBodyDef);
 	GameAgent* leftPlatformAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/wall.jpg", startPlatformVertices, Indices,
 		glm::vec3(-80, 500, 0), 0, GameCamera, leftPlatformBody, 0);	//DOES affect objects position, but y is oposite
 																		//Shape the physics body
 	b2PolygonShape leftPlatformBox;
-	leftPlatformBox.SetAsBox(0.0f, 0.0f);		//Doesnt affect the way the object looks. I have no idea if this is right.
+	leftPlatformBox.SetAsBox(3.08f, 0.2f);		//Doesnt affect the way the object looks. I have no idea if this is right.
 	b2FixtureDef leftPlatformFixture;
 	leftPlatformFixture.shape = &leftPlatformBox;
 	leftPlatformFixture.userData = leftPlatformBody;
@@ -64,14 +64,14 @@ Scene * Game::LevelOne()
 
 	// Define the right starting platform.
 	b2BodyDef rightPlatformBodyDef;
-	rightPlatformBodyDef.position.Set(20.0f, 24.0f); //*25			//Doesn't affect the way the object looks.
+	rightPlatformBodyDef.position.Set(45.6f, 20.0f); //*25			//Doesn't affect the way the object looks.
 	rightPlatformBodyDef.type = b2_staticBody;
 	b2Body* rightPlatformBody = LevelOne->GetWorld()->CreateBody(&rightPlatformBodyDef);
 	GameAgent* rightPlatformAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/wall.jpg", startPlatformVertices, Indices,
 		glm::vec3(1140, 500, 0), 0, GameCamera, rightPlatformBody, 0);	//DOES affect objects position, but y is oposite
 																		//Shape the physics body
 	b2PolygonShape rightPlatformBox;
-	rightPlatformBox.SetAsBox(0.0f, 0.0f);		//Doesnt affect the way the object looks. I have no idea if this is right.
+	rightPlatformBox.SetAsBox(3.08f, 0.2f);		//Doesnt affect the way the object looks. I have no idea if this is right.
 	b2FixtureDef rightPlatformFixture;
 	rightPlatformFixture.shape = &rightPlatformBox;
 	rightPlatformFixture.userData = rightPlatformBody;

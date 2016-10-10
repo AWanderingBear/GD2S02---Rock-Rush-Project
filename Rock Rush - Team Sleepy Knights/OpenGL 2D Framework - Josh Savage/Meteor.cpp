@@ -11,9 +11,20 @@ Meteor::~Meteor()
 {
 }
 
-bool Meteor::Update()
+bool Meteor::Update(float deltaTime)
 {
 	GameAgent::Update();
+	
+	if (holdingJoint == nullptr) {
+
+		LifeTime += deltaTime;
+
+		if (LifeTime > LifeSpan) {
+
+			Alive = false;
+		}
+	}
+
 	return Alive;
 }
 
@@ -41,6 +52,8 @@ void Meteor::Kill()
 void Meteor::CreateJoint(Player* _Player)
 {
 	DeleteJoint();	//Check and delete current joint
+
+	LifeTime = 0.0f;
 
 	GetPhysics()->SetLinearVelocity(b2Vec2(0.0f, 0.0f)); //Reset speed so we don't get infinite jumping xD
 	b2WeldJointDef md;

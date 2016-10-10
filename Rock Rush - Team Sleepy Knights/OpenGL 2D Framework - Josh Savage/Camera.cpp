@@ -65,6 +65,11 @@ glm::vec2 Camera::ScreenToBox2D(glm::vec2 mousepos)
 	return glm::vec2((mousepos.x + m_Position.x)/25.0, mousepos.y/25.0);
 }
 
+float Camera::getDeltaTime()
+{
+	return deltaTime;
+}
+
 glm::mat4 Camera::GetView(){
 
 	return m_View;

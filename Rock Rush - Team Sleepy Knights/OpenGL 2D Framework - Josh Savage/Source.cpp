@@ -96,64 +96,54 @@ void HandleInput() {
 
 	Camera* CurrentCamera = Test->GetCurrentScene()->GetCamera();
 
-	if (keys[GLFW_KEY_W])
-		CurrentCamera->Movement(GLFW_KEY_W);
-	if (keys[GLFW_KEY_S])
-		CurrentCamera->Movement(GLFW_KEY_S);
-	if (keys[GLFW_KEY_A])
-		CurrentCamera->Movement(GLFW_KEY_A);
-	if (keys[GLFW_KEY_D])
-		CurrentCamera->Movement(GLFW_KEY_D);
-
-
-	if (keys[GLFW_KEY_UP] && upReleased)
+	if (keys[GLFW_KEY_W] && upReleased)
 	{
-		Test->HandleKeyInput(GLFW_KEY_UP);
+		Test->HandleKeyInput(GLFW_KEY_W);
 		upReleased = false;
 	}
-	else if (!keys[GLFW_KEY_UP])
+	else if (!keys[GLFW_KEY_W])
 	{
 		upReleased = true;
 	}
 
-	if (keys[GLFW_KEY_DOWN] && downReleased)
+	if (keys[GLFW_KEY_S] && downReleased)
 	{
-		Test->HandleKeyInput(GLFW_KEY_DOWN);
+		Test->HandleKeyInput(GLFW_KEY_S);
 		downReleased = false;
 	}
-	else if (!keys[GLFW_KEY_DOWN])
+	else if (!keys[GLFW_KEY_S])
 	{
 		downReleased = true;
 	}
 
-	if (keys[GLFW_KEY_LEFT])
-		Test->HandleKeyInput(GLFW_KEY_LEFT);
-	if (keys[GLFW_KEY_RIGHT])
-		Test->HandleKeyInput(GLFW_KEY_RIGHT);
+	if (keys[GLFW_KEY_A])
+		Test->HandleKeyInput(GLFW_KEY_A);
+	if (keys[GLFW_KEY_D])
+		Test->HandleKeyInput(GLFW_KEY_D);
 
-	if (keys[GLFW_KEY_U] && uReleased)
+	if (keys[GLFW_KEY_I] && uReleased)
 	{
-		Test->HandleKeyInput(GLFW_KEY_U);
+		Test->HandleKeyInput(GLFW_KEY_I);
 		uReleased = false;
 	}
-	else if (!keys[GLFW_KEY_U])
+	else if (!keys[GLFW_KEY_I])
 	{
 		uReleased = true;
 	}
 
-	if (keys[GLFW_KEY_J] && jReleased)
+	if (keys[GLFW_KEY_K] && jReleased)
 	{
-		Test->HandleKeyInput(GLFW_KEY_J);
+		Test->HandleKeyInput(GLFW_KEY_K);
 		jReleased = false;
 	}
-	else if (!keys[GLFW_KEY_J])
+	else if (!keys[GLFW_KEY_K])
 	{
 		jReleased = true;
 	}
-	if (keys[GLFW_KEY_H])
-		Test->HandleKeyInput(GLFW_KEY_H);
-	if (keys[GLFW_KEY_K])
-		Test->HandleKeyInput(GLFW_KEY_K);
+	if (keys[GLFW_KEY_J])
+		Test->HandleKeyInput(GLFW_KEY_J);
+	if (keys[GLFW_KEY_L])
+		Test->HandleKeyInput(GLFW_KEY_L);
 
 }
 

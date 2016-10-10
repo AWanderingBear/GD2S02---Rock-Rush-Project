@@ -9,7 +9,8 @@ public:
 	Meteor(GLuint Shader, std::string _strTexture, std::vector<GLfloat> Vertices, std::vector<GLuint> Elements, glm::vec3 Position, float Rotation, Camera * Camera, b2Body* Physics);
 	~Meteor();
 
-	bool Update();
+	bool Update(float deltaTime);
+
 	void Render();
 	b2Body* GetPhysics();
 	int GetType();
@@ -21,7 +22,11 @@ public:
 private:
 
 	bool Alive;
-						//CreateJoint calls this if needed.
+
+	//CreateJoint calls this if needed.
 	b2WeldJoint* holdingJoint = nullptr;					//The enemies current joint
 	Player* currentlyConnectedPlayer;	//I couldn't think of any better way to reset the player carrying bool than to store the player in here to us in functions, sorry for ugly code.
+	
+	float LifeTime = 0.0f;
+	float LifeSpan = 5.0f;
 };

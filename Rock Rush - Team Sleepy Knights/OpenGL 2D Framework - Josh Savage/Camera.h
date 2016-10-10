@@ -26,6 +26,8 @@ public:
 
 	glm::vec2 ScreenToBox2D(glm::vec2 mousepos);
 
+	float getDeltaTime();
+
 private:
 
 	glm::vec3 m_Position;
