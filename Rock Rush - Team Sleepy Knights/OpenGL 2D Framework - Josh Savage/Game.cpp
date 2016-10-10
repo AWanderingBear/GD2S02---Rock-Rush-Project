@@ -137,8 +137,6 @@ Scene * Game::LevelOne()
 	fixtureDefTriangle.userData = bPlayer;
 	body3->CreateFixture(&fixtureDefTriangle);
 
-
-
 	//Background
 	LevelOne->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BackgroundSky.jpg", BackgroundVertices, Indices, 
 		glm::vec3(1537, 384, -0.1), 0, GameCamera));
@@ -158,9 +156,9 @@ Scene * Game::LevelOne()
 
 void Game::Initialise()
 {
-
 	ProgramManager["Ortho"] = ProgramCreator.CreateShader("Shaders/Vertex/OrthoVertexShader.vert", "Shaders/Fragment/TextureFragmentShader.frag");
 
+	//vecLabels[0].setText("Health: " /*+ std::to_string(pPlayer->m_PlayerLives)*/);
 	Scenes.push_back(LevelOne());;
 }
 

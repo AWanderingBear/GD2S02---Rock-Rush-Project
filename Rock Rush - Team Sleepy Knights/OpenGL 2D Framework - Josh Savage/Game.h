@@ -28,6 +28,8 @@ public:
 	void HandleMove(glm::vec2 mousePos);
 	void HandleKeyInput();
 
+//	std::vector<TextLabel> vecLabels;
+
 private:
 
 	Scene* LevelOne();

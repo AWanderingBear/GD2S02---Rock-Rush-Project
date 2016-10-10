@@ -75,6 +75,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="TextLabel.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -116,6 +119,9 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files\Game Objects</Filter>
     </ClInclude>
+    <ClInclude Include="TextLabel.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Fragment\BaseFragmentShader.frag">
@@ -141,6 +147,12 @@
     </None>
     <None Include="Shaders\Vertex\OrthoVertexShader.vert">
       <Filter>Resource Files\Vertex Shaders</Filter>
+    </None>
+    <None Include="TextVertexShader.vert">
+      <Filter>Resource Files\Vertex Shaders</Filter>
+    </None>
+    <None Include="TextFragmentShader.frag">
+      <Filter>Resource Files\Fragment Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

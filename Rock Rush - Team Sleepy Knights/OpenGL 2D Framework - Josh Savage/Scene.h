@@ -8,6 +8,7 @@
 #include "Shootable.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "TextLabel.h"
 
 class Game;
 
@@ -42,6 +43,8 @@ public:
 
 	void SetPrisma(b2Body* PrismaticBody, b2PrismaticJoint* PrismaticJoint);
 
+	std::vector<TextLabel> vecLabels;
+
 private:
 
 	std::vector<GameAgent*> WorldAgents;
@@ -69,5 +72,6 @@ private:
 	Game* GameInstance;
 	int SwitchCount;
 	std::vector<Player*> Players;
+
 };
 

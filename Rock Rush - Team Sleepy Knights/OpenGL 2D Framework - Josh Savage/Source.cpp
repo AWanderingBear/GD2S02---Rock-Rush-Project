@@ -110,7 +110,6 @@ void UpdateMain() {
 //Program Entry Point
 int main() 
 {
-
 	//+++ Window Creation +++
 	//Window Initialisation for GLFW
 	glfwInit();

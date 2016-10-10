@@ -6,7 +6,6 @@
 
 Scene::Scene(Camera* Camera, Game* Game, int TotalFirable, int TotalPigs)
 {
-
 	m_Camera = Camera;
 	b2Vec2 gravity(0.0f, 10.0f);
 	World = new b2World(gravity);
@@ -22,7 +21,10 @@ Scene::~Scene()
 
 void Scene::Update()
 {
-
+	//TextLabel SeekLabel("AI Mode: Seek", "Assets/Fonts/arial.ttf");
+	//SeekLabel.setPosition(glm::vec2(230.0f, 20.0f));
+	//SeekLabel.setColor(glm::vec3(0.0f, 0.0f, 0.0f));
+	//vecLabels.push_back(SeekLabel);	// Why does this move the camera up xD?
 
 	if (FiredCount >= MaxFired) {
 
@@ -122,17 +124,27 @@ void Scene::Update()
 		int ReturnCode = Agent->Update();
 		Agent->Render();
 	}
+
+	//for (unsigned int i = 0; i < GameInstance->vecLabels.size(); i++)
+	//{
+	//	GameInstance->vecLabels[i].Render();
+	//}
+
+	for (unsigned int i = 0; i < vecLabels.size(); i++)
+	{
+		vecLabels[i].Render();
+	}
+
+	//vecLabels[0].setText("Health: " /*+ std::to_string(pPlayer->m_PlayerLives)*/);
 }
 
 void Scene::AddGameAgent(GameAgent* Adding)
 {
-
 	WorldAgents.push_back(Adding);
 }
 
 void Scene::AddShootable(Shootable * Adding)
 {
-
 	Shootables.push_back(Adding);
 }
 
