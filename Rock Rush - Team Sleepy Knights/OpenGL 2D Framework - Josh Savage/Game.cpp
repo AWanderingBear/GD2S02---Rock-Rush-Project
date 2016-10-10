@@ -31,11 +31,11 @@ Scene * Game::LevelOne()
 
 	// Define the ground
 	b2BodyDef mainPlatformBodyDef;
-	mainPlatformBodyDef.position.Set(20.8f, 24.0f); //*25			//Doesn't affect the way the object looks.
+	mainPlatformBodyDef.position.Set(20.8f, 20.0f); //*25			//Doesn't affect the way the object looks.
 	mainPlatformBodyDef.type = b2_staticBody;
 	b2Body* mainPlatformBody = LevelOne->GetWorld()->CreateBody(&mainPlatformBodyDef);
 	GameAgent* mainPlatformAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/wall.jpg", mainPlatformVertices, Indices,
-		glm::vec3(520, 600, 0), 0, GameCamera, mainPlatformBody, 0);	//DOES affect objects position, but y is oposite
+		glm::vec3(520, 500, 0), 0, GameCamera, mainPlatformBody, 0);	//DOES affect objects position, but y is oposite
 	//Shape the physics body
 	b2PolygonShape mainPlatformBox;
 	mainPlatformBox.SetAsBox(15.36f, 1.0f);		//Doesnt affect the way the object looks. I have no idea if this is right.
@@ -48,11 +48,11 @@ Scene * Game::LevelOne()
 
 	// Define the left starting platform.
 	b2BodyDef leftPlatformBodyDef;
-	leftPlatformBodyDef.position.Set(-3.2f, 20.0f); //*25			//Doesn't affect the way the object looks.
+	leftPlatformBodyDef.position.Set(-3.2f, 16.0f); //*25			//Doesn't affect the way the object looks.
 	leftPlatformBodyDef.type = b2_staticBody;
 	b2Body* leftPlatformBody = LevelOne->GetWorld()->CreateBody(&leftPlatformBodyDef);
 	GameAgent* leftPlatformAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/wall.jpg", startPlatformVertices, Indices,
-		glm::vec3(-80, 500, 0), 0, GameCamera, leftPlatformBody, 0);	//DOES affect objects position, but y is oposite
+		glm::vec3(-80, 400, 0), 0, GameCamera, leftPlatformBody, 0);	//DOES affect objects position, but y is oposite
 																		//Shape the physics body
 	b2PolygonShape leftPlatformBox;
 	leftPlatformBox.SetAsBox(3.08f, 0.2f);		//Doesnt affect the way the object looks. I have no idea if this is right.
@@ -64,11 +64,11 @@ Scene * Game::LevelOne()
 
 	// Define the right starting platform.
 	b2BodyDef rightPlatformBodyDef;
-	rightPlatformBodyDef.position.Set(45.6f, 20.0f); //*25			//Doesn't affect the way the object looks.
+	rightPlatformBodyDef.position.Set(45.6f, 16.0f); //*25			//Doesn't affect the way the object looks.
 	rightPlatformBodyDef.type = b2_staticBody;
 	b2Body* rightPlatformBody = LevelOne->GetWorld()->CreateBody(&rightPlatformBodyDef);
 	GameAgent* rightPlatformAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/wall.jpg", startPlatformVertices, Indices,
-		glm::vec3(1140, 500, 0), 0, GameCamera, rightPlatformBody, 0);	//DOES affect objects position, but y is oposite
+		glm::vec3(1140, 400, 0), 0, GameCamera, rightPlatformBody, 0);	//DOES affect objects position, but y is oposite
 																		//Shape the physics body
 	b2PolygonShape rightPlatformBox;
 	rightPlatformBox.SetAsBox(3.08f, 0.2f);		//Doesnt affect the way the object looks. I have no idea if this is right.
@@ -158,6 +158,7 @@ void Game::Initialise()
 	ProgramManager["Ortho"] = ProgramCreator.CreateShader("Shaders/Vertex/OrthoVertexShader.vert", "Shaders/Fragment/TextureFragmentShader.frag");
 
 	Scenes.push_back(LevelOne());
+	Scenes.push_back(LevelOne());
 
 	SpawnSpecialMeteor();
 }
@@ -205,6 +206,7 @@ void Game::NextScene()
 	if (!(CurrentScene == (int) Scenes.size() - 1)) {
 		CurrentScene += 1;
 	}
+
 }
 
 void Game::GoToScene(int Scene)

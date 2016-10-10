@@ -10,7 +10,7 @@ Scene::Scene(Camera* Camera, Game* Game, int TotalFirable, int TotalPigs)
 	m_Camera = Camera;
 	b2Vec2 gravity(0.0f, 10.0f);
 	World = new b2World(gravity);
-	MaxFired = TotalFirable;
+	WinningScore = TotalFirable;
 	GameInstance = Game;
 	MeteorCount = TotalPigs;
 }
@@ -24,15 +24,9 @@ void Scene::Update()
 {
 
 
-	if (FiredCount >= MaxFired) {
-
-		if (SwitchCount > 300) {
+	if (P1Score > WinningScore || P2Score > WinningScore) {
 
 			GameInstance->NextScene();
-		}
-		else {
-			SwitchCount += 1;
-		}
 	}
 
 	m_Camera->Update();
@@ -68,8 +62,37 @@ void Scene::Update()
 
 		SpecialMeteor* Agent = SpecialMeteors[i];
 
-		Agent->Update();
-		Agent->Render();
+		bool Alive = Agent->Update();
+
+		if (Alive) {
+
+			Agent->Render();
+		}
+		else {
+
+			//Scoring
+			b2Vec2 Position = Agent->GetPhysics()->GetPosition();
+
+			if (Position.x > 400) {
+
+				//Player1 Scores
+				P1Score++;
+			}
+			else {
+
+				//Player2 Scores
+				P2Score++;
+			}
+
+			SpecialMeteors.erase(SpecialMeteors.begin() + i);
+			World->DestroyBody(Agent->GetPhysics());
+			delete Agent;
+		}
+
+		if (SpecialMeteors.size() < 1) {
+
+			GameInstance->SpawnSpecialMeteor();
+		}
 	}
 
 	for (int i = 0; i < (int)Players.size(); i++)
@@ -77,7 +100,7 @@ void Scene::Update()
 		Player* Agent = Players[i];
 
 		//if (!ReturnCode) print debug message
-		int ReturnCode = Agent->Update();
+		int ReturnCode = Agent->Update(m_Camera->getDeltaTime());
 		Agent->Render();
 	}
 }

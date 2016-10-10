@@ -14,6 +14,14 @@ SpecialMeteor::~SpecialMeteor()
 bool SpecialMeteor::Update()
 {
 	GameAgent::Update();
+
+	b2Vec2 position = PhysicsBody->GetPosition();
+
+	if (position.y > 29.5) {
+
+		Alive = false;
+	}
+
 	return Alive;
 }
 

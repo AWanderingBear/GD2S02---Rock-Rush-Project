@@ -6,6 +6,9 @@ Player::Player(GLuint Shader, std::string _strTexture, std::vector<GLfloat> Vert
 	: GameAgent(Shader, _strTexture, Vertices, Elements, Position, Rotation, Camera, Physics, 8)
 {
 	SetSpeed(600.0f);
+	Alive = true; 
+	DeathTime = 1.0f;
+	PlayerCode = 1;
 }
 
 Player::~Player()
@@ -13,21 +16,52 @@ Player::~Player()
 
 }
 
-bool Player::Update()
+bool Player::Update(float deltaTime)
 {
-	//Time normalization
-	GLfloat currentFrame = glfwGetTime();
-	deltaTime = currentFrame - lastFrame;
-	lastFrame = currentFrame;
 
-	GameAgent::Update(); // Code breaks here in Debug Mode.
+	DeltaTime = deltaTime;
+
+	if (Alive) {
+
+		GameAgent::Update(); 
+		b2Vec2 Position = PhysicsBody->GetPosition();
+
+		if (Position.y > 31.5f) {
+
+			Kill();
+		}
+	}
+	else {
+
+		DeathCounter += deltaTime;
+
+		if (DeathCounter >= DeathTime) {
+
+			//Bring to life
+			Alive = true;
+			PhysicsBody->SetGravityScale(1.0f);
+			if (PlayerCode == 1) {
+				PhysicsBody->SetTransform(b2Vec2(-3.2f, 15.0f), 0);
+			}
+			else {
+
+				PhysicsBody->SetTransform(b2Vec2(45.6f, 15.0f), 0);
+			}
+		}
+	}
+
+	if (RemainingJumps < 6) {
+		RemainingJumps++;
+	}
 
 	return true;
 }
 
 void Player::Render()
 {
-	GameAgent::Render();
+	if (Alive) {
+		GameAgent::Render();
+	}
 }
 
 b2Body * Player::GetPhysics()
@@ -42,7 +76,7 @@ void Player::SetSpeed(float playerSpeed)
 
 void Player::Move(int key)
 {
-	GLfloat NormalizedSpeed = m_Speed * deltaTime;
+	GLfloat NormalizedSpeed = m_Speed * DeltaTime;
 
 	if (key == GLFW_KEY_LEFT) {
 		GameAgent::AddSidewaysForce(-NormalizedSpeed);
@@ -110,7 +144,10 @@ void Player::Move(int key)
 	}
 
 	if (key == GLFW_KEY_UP) {
-		GameAgent::AddUpwardsVelocity(NormalizedSpeed);
+		if (RemainingJumps > 0) {
+			GameAgent::AddUpwardsVelocity(NormalizedSpeed);
+			RemainingJumps--;
+		}
 	}
 }
 
@@ -137,6 +174,14 @@ void Player::SetCurrentlyHolding(GameAgent* object)
 GameAgent* Player::GetCurrentlyHolding()
 {
 	return currentlyHolding;
+}
+
+void Player::Kill()
+{
+
+	Alive = false;
+	PhysicsBody->SetGravityScale(0.0f);
+	PhysicsBody->SetTransform(b2Vec2(-10.0f, -10.0f), 0);
 }
 
 

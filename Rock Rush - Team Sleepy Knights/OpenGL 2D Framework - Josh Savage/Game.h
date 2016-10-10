@@ -27,7 +27,8 @@ public:
 	void HandleMove(glm::vec2 mousePos);
 	void HandleKeyInput(int _key);
 
-
+	void SpawnSpecialMeteor();
+	void SpawnNormalMeteor();
 
 private:
 
@@ -47,8 +48,8 @@ private:
 	ShaderLoader ProgramCreator;
 	GLFWwindow* m_Window;
 
-	void SpawnNormalMeteor();
-	void SpawnSpecialMeteor();
+	
+	
 
 };
 

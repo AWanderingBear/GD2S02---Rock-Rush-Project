@@ -64,7 +64,7 @@ private:
 
 	//Firable
 	int FiredCount = 0;
-	int MaxFired;
+	int WinningScore;
 
 	//Meteors
 	int MeteorCount;
@@ -73,6 +73,9 @@ private:
 
 	//Players
 	std::vector<Player*> Players;
+
+	int P1Score;
+	int P2Score;
 
 	Game* GameInstance;
 	int SwitchCount;

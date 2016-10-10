@@ -37,6 +37,9 @@
     <Filter Include="Header Files\Utilities">
       <UniqueIdentifier>{70d2bd6f-a0f0-4120-a518-d06666237865}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Collision">
+      <UniqueIdentifier>{c52fd8a6-6b65-437c-a2a9-16478884e983}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -116,11 +119,11 @@
     <ClInclude Include="Meteor.h">
       <Filter>Header Files\Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="MeteorCollisionHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SpecialMeteor.h">
       <Filter>Header Files\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="MeteorCollisionHandler.h">
+      <Filter>Header Files\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
