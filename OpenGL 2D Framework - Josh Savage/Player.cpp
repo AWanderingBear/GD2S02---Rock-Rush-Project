@@ -2,13 +2,13 @@
 #include "Meteor.h"
 #include "SpecialMeteor.h"
 
-Player::Player(GLuint Shader, std::string _strTexture, std::vector<GLfloat> Vertices, std::vector<GLuint> Elements, glm::vec3 Position, float Rotation, Camera * Camera, b2Body* Physics)
+Player::Player(GLuint Shader, std::string _strTexture, std::vector<GLfloat> Vertices, std::vector<GLuint> Elements, glm::vec3 Position, float Rotation, Camera * Camera, b2Body* Physics, int _playerCode)
 	: GameAgent(Shader, _strTexture, Vertices, Elements, Position, Rotation, Camera, Physics, 8)
 {
 	SetSpeed(600.0f);
 	Alive = true; 
 	DeathTime = 1.0f;
-	PlayerCode = 1;
+	PlayerCode = _playerCode;
 }
 
 Player::~Player()
@@ -44,7 +44,6 @@ bool Player::Update(float deltaTime)
 				PhysicsBody->SetTransform(b2Vec2(-3.2f, 15.0f), 0);
 			}
 			else {
-
 				PhysicsBody->SetTransform(b2Vec2(45.6f, 15.0f), 0);
 			}
 		}

@@ -37,6 +37,8 @@ private:
 	float spawnNormalTimer = 0.0f;
 
 	Scene* LevelOne();
+	Scene* GameOver();
+	Scene* MainMenu();
 	//Scene* LevelTwo();
 
 	int CurrentScene = 0;

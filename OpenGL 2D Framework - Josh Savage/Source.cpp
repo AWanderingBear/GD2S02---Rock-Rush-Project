@@ -145,6 +145,9 @@ void HandleInput() {
 	if (keys[GLFW_KEY_L])
 		Test->HandleKeyInput(GLFW_KEY_L);
 
+	if (keys[GLFW_KEY_ENTER])
+		Test->HandleKeyInput(GLFW_KEY_ENTER);
+
 }
 
 //Updates

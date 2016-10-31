@@ -45,7 +45,6 @@ int Meteor::GetType()
 
 void Meteor::Kill()
 {
-
 	Alive = false;
 }
 

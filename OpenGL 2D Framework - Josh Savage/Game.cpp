@@ -20,6 +20,29 @@ Game::~Game()
 {
 }
 
+Scene * Game::MainMenu()
+{
+	Camera* GameCamera = new Camera(600.0f, glm::vec3(-150.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), m_Window);
+	Scene* MainMenu = new Scene(GameCamera, this, 3, 2);
+	//Background
+	MainMenu->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BackgroundSky2.jpg", BackgroundVertices, Indices,
+		glm::vec3(1537, 384, -0.1), 0, GameCamera));
+
+	return MainMenu;
+}
+
+Scene * Game::GameOver()
+{
+	Camera* GameCamera = new Camera(600.0f, glm::vec3(-150.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), m_Window);
+	Scene* GameOver = new Scene(GameCamera, this, 3, 2);
+	//Background
+	//GameOver->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BackgroundSky2.jpg", BackgroundVertices, Indices,
+	//	glm::vec3(1537, 384, -0.1), 0, GameCamera));
+
+	return GameOver;
+}
+
+
 Scene * Game::LevelOne()
 {
 	//This method of creation is* horrific and should be handled in the constructor. Note for next time. 
@@ -92,10 +115,10 @@ Scene * Game::LevelOne()
 	b2Body* playerOneBody = LevelOne->GetWorld()->CreateBody(&playerOneBodyDef);
 	
 	Player* pPlayer = new Player(ProgramManager["Ortho"], "Assets/Textures/awesomeface.png", SmallSquareVertices, Indices,
-		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerZeroBody /*,1 for collision (Shootables)*/);
+		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerZeroBody /*,1 for collision (Shootables)*/, 1);
 
 	Player* bPlayer = new Player(ProgramManager["Ortho"], "Assets/Textures/hexagon.png", SmallSquareVertices, Indices,
-		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerOneBody);
+		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerOneBody, 2);
 
 
 	//Define Shape
@@ -137,7 +160,7 @@ Scene * Game::LevelOne()
 	playerOneBody->CreateFixture(&fixtureDefBox);
 
 	//Background
-	LevelOne->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BackgroundSky.jpg", BackgroundVertices, Indices, 
+	LevelOne->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BackgroundSky2.jpg", BackgroundVertices, Indices, 
 		glm::vec3(1537, 384, -0.1), 0, GameCamera));
 
 	////Platforms
@@ -148,6 +171,7 @@ Scene * Game::LevelOne()
 	////Player Characters
 	LevelOne->AddPlayer(pPlayer);
 	LevelOne->AddPlayer(bPlayer); 
+	//SpawnSpecialMeteor();
 
 	return LevelOne;
 }
@@ -157,10 +181,10 @@ void Game::Initialise()
 
 	ProgramManager["Ortho"] = ProgramCreator.CreateShader("Shaders/Vertex/OrthoVertexShader.vert", "Shaders/Fragment/TextureFragmentShader.frag");
 
+	Scenes.push_back(MainMenu());
 	Scenes.push_back(LevelOne());
-	Scenes.push_back(LevelOne());
+	Scenes.push_back(GameOver());
 
-	SpawnSpecialMeteor();
 }
 
 void Game::Update()
@@ -170,12 +194,16 @@ void Game::Update()
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 
-	spawnNormalTimer -= deltaTime;
-	if (spawnNormalTimer <= 0.0f)
+	if (CurrentScene == 1)
 	{
-		SpawnNormalMeteor();
-		spawnNormalTimer += 3.0f +  static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 5.0f - 3.0f));  //Spawns between 3 and 5 seconds. To change change both 3s or the 5.
-	}
+
+		spawnNormalTimer -= deltaTime;
+		if (spawnNormalTimer <= 0.0f)
+		{
+			SpawnNormalMeteor();
+			spawnNormalTimer += 3.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 5.0f - 3.0f));  //Spawns between 3 and 5 seconds. To change change both 3s or the 5.
+		}
+	}	
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//Setting Clear color
@@ -184,7 +212,6 @@ void Game::Update()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	Scenes[CurrentScene]->Update();
-
 
 	//Check if there is a special meteor, if not
 	//SpawnSpecialMeteor();
@@ -220,8 +247,7 @@ void Game::GoToScene(int Scene)
 
 void Game::HandleClick(glm::vec2 mousePos)
 {
-
-	GetCurrentScene()->HandleClick(mousePos);
+		GetCurrentScene()->HandleClick(mousePos);
 }
 
 void Game::HandleRelease()
@@ -237,8 +263,18 @@ void Game::HandleMove(glm::vec2 mousePos)
 void Game::HandleKeyInput(int _key)
 {
 	int k = _key;
-	GetCurrentScene()->HandleKeyInput(_key);
+	if (CurrentScene == 0 || CurrentScene == 2)
+	{
+		GetCurrentScene()->HandleMenuKeyInput(_key);
+	}
+	if (CurrentScene == 1)
+	{
+		GetCurrentScene()->HandleKeyInput(_key);
+	}
+	
 }
+
+
 
 void Game::SpawnNormalMeteor()
 {
@@ -276,27 +312,30 @@ void Game::SpawnSpecialMeteor()
 
 	float specialx = 6.5f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 30.0f - 6.5f));
 
-	//Define the Box
-	b2BodyDef meteorBodyDef;
-	meteorBodyDef.type = b2_dynamicBody;
-	meteorBodyDef.position.Set(specialx, 0.0f);
+	if (CurrentScene == 1)
+	{
+		//Define the Box
+		b2BodyDef meteorBodyDef;
+		meteorBodyDef.type = b2_dynamicBody;
+		meteorBodyDef.position.Set(specialx, 0.0f);
 
-	b2Body* meteorBody = currentScene->GetWorld()->CreateBody(&meteorBodyDef);
+		b2Body* meteorBody = currentScene->GetWorld()->CreateBody(&meteorBodyDef);
 
-	SpecialMeteor* specialmeteor = new SpecialMeteor(ProgramManager["Ortho"], "Assets/Textures/robot.png", SmallSquareVertices, Indices,
-		glm::vec3(0.0, 0.0, 0.0), 0, currentScene->GetCamera(), meteorBody /*,1 for collision (Shootables)*/);
+		SpecialMeteor* specialmeteor = new SpecialMeteor(ProgramManager["Ortho"], "Assets/Textures/robot.png", SmallSquareVertices, Indices,
+			glm::vec3(0.0, 0.0, 0.0), 0, currentScene->GetCamera(), meteorBody /*,1 for collision (Shootables)*/);
 
-	b2CircleShape Circle;
-	Circle.m_radius = 1.0f;
+		b2CircleShape Circle;
+		Circle.m_radius = 1.0f;
 
-	b2FixtureDef fixtureDefCircle;
-	fixtureDefCircle.shape = &Circle;
-	fixtureDefCircle.density = 10.0f;
+		b2FixtureDef fixtureDefCircle;
+		fixtureDefCircle.shape = &Circle;
+		fixtureDefCircle.density = 10.0f;
 
-	fixtureDefCircle.userData = specialmeteor;
-	meteorBody->CreateFixture(&fixtureDefCircle);
+		fixtureDefCircle.userData = specialmeteor;
+		meteorBody->CreateFixture(&fixtureDefCircle);
 
-	//Change to meteor
-	currentScene->AddSpecialMeteor(specialmeteor);
+		//Change to meteor
+		currentScene->AddSpecialMeteor(specialmeteor);
+	}
 }
 

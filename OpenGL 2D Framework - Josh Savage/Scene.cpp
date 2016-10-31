@@ -22,8 +22,6 @@ Scene::~Scene()
 
 void Scene::Update()
 {
-
-
 	if (P1Score > WinningScore || P2Score > WinningScore) {
 
 			GameInstance->NextScene();
@@ -88,22 +86,44 @@ void Scene::Update()
 			World->DestroyBody(Agent->GetPhysics());
 			delete Agent;
 		}
-
-		if (SpecialMeteors.size() < 1) {
-
-			GameInstance->SpawnSpecialMeteor();
-		}
 	}
-
+	if (SpecialMeteors.size() < 1) {
+		GameInstance->SpawnSpecialMeteor();
+	}
+	
 	for (int i = 0; i < (int)Players.size(); i++)
 	{
 		Player* Agent = Players[i];
 
+		if (Agent->GetPhysics()->GetTransform().p.y >= 20.0f)
+		{
+			if (Agent->underWater == false) 
+			{
+				b2Vec2 currentVelocity = Agent->GetPhysics()->GetLinearVelocity();
+				currentVelocity.y /= 2;
+				Agent->GetPhysics()->SetLinearVelocity(currentVelocity);	//Immediate subtle slow when enter water.
+
+				Agent->GetPhysics()->SetLinearDamping(Agent->GetPhysics()->GetLinearDamping()* 5.0f);	//Water is resistant to changes in all movements
+				Agent->GetPhysics()->SetGravityScale(0.5f);	//We dont want to cap jumping too hard and this setting seemed to make it decent.
+				Agent->underWater = true;
+			}
+		}
+		else
+		{
+			if (Agent->underWater == true)
+			{
+				Agent->GetPhysics()->SetLinearDamping(Agent->GetPhysics()->GetLinearDamping()* 0.2f);
+				Agent->GetPhysics()->SetGravityScale(1.0f);
+				Agent->underWater = false;
+			}
+		}
 		//if (!ReturnCode) print debug message
 		int ReturnCode = Agent->Update(m_Camera->getDeltaTime());
 		Agent->Render();
 	}
 }
+
+
 
 void Scene::AddGameAgent(GameAgent* Adding)
 {
@@ -207,8 +227,15 @@ void Scene::HandleMove(glm::vec2 mousePos)
 	}
 }
 
+void Scene::HandleMenuKeyInput(int _key)
+{
+	if (_key == GLFW_KEY_ENTER)
+		GameInstance->NextScene();
+}
+
 void Scene::HandleKeyInput(int _key)
 {
+	
 	//Player 0 movement
 	if (_key == GLFW_KEY_W)
 		Players[0]->Move(GLFW_KEY_UP);
@@ -229,6 +256,7 @@ void Scene::HandleKeyInput(int _key)
 	if (_key == GLFW_KEY_L)
 		Players[1]->Move(GLFW_KEY_RIGHT);
 }
+
 
 void Scene::SetLaunchJoint(b2Joint * joint, int index)
 {

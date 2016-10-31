@@ -4,7 +4,7 @@ class Player :
 	 protected GameAgent
 {
 public:
-	Player(GLuint Shader, std::string _strTexture, std::vector<GLfloat> Vertices, std::vector<GLuint> Elements, glm::vec3 Position, float Rotation, Camera * Camera, b2Body* Physics);
+	Player(GLuint Shader, std::string _strTexture, std::vector<GLfloat> Vertices, std::vector<GLuint> Elements, glm::vec3 Position, float Rotation, Camera * Camera, b2Body* Physics, int _playerCode);
 	~Player();
 
 	bool Update(float deltaTime);
@@ -21,6 +21,8 @@ public:
 
 	void Kill();
 
+
+	bool underWater = false; 	//Sorry for bad code, I have no fucks to give at this point - Amber.
 private:
 	float m_Speed;
 

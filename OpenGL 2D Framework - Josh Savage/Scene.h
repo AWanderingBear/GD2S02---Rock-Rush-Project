@@ -38,11 +38,13 @@ public:
 	void HandleRelease();
 	void HandleMove(glm::vec2 mousePos);
 	void HandleKeyInput(int _key);
+	void HandleMenuKeyInput(int _key);
 
 	//std::vector<Player>GetPlayer();
 
 	void SetLaunchJoint(b2Joint* joint, int index);
 	b2Joint* GetLaunchJoint(int index);
+
 
 	void SetPrisma(b2Body* PrismaticBody, b2PrismaticJoint* PrismaticJoint);
 
