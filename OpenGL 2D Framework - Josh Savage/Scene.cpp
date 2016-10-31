@@ -13,6 +13,8 @@ Scene::Scene(Camera* Camera, Game* Game, int TotalFirable, int TotalPigs)
 	WinningScore = TotalFirable;
 	GameInstance = Game;
 	MeteorCount = TotalPigs;
+	P1Score = 0;
+	P2Score = 0; 
 }
 
 Scene::~Scene()
@@ -102,6 +104,11 @@ void Scene::Update()
 		//if (!ReturnCode) print debug message
 		int ReturnCode = Agent->Update(m_Camera->getDeltaTime());
 		Agent->Render();
+	}
+
+	if (DisplayScore) {
+
+		GameInstance->DrawScore(P1Score, P2Score);
 	}
 }
 
@@ -228,6 +235,11 @@ void Scene::HandleKeyInput(int _key)
 		Players[1]->Move(GLFW_KEY_LEFT);
 	if (_key == GLFW_KEY_L)
 		Players[1]->Move(GLFW_KEY_RIGHT);
+}
+
+void Scene::EnableScore()
+{
+	DisplayScore = true;
 }
 
 void Scene::SetLaunchJoint(b2Joint * joint, int index)

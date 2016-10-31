@@ -3,9 +3,11 @@
 #include <vector>
 #include <map>
 
+
 //Local Includes
 #include "Scene.h"
 #include "ShaderLoader.h"
+#include "imgui.h"
 
 class Game
 {
@@ -30,6 +32,8 @@ public:
 	void SpawnSpecialMeteor();
 	void SpawnNormalMeteor();
 
+	void DrawScore(int P1Score, int P2Score);
+
 private:
 
 	GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
@@ -41,15 +45,9 @@ private:
 
 	int CurrentScene = 0;
 
-
-
 	std::vector<Scene*> Scenes;
 	std::map<std::string, GLuint> ProgramManager;
 	ShaderLoader ProgramCreator;
 	GLFWwindow* m_Window;
-
-	
-	
-
 };
 

@@ -25,6 +25,7 @@ on being able to do stuff with them.
 #include "ShaderLoader.h"
 #include "Game.h"
 #include "Player.h"
+#include "imgui_impl_glfw_gl3.h"
 
 //Global Variables
 std::map<std::string, GLuint> ProgramManager;
@@ -154,7 +155,6 @@ void UpdateMain() {
 	Test->Update();
 }
 
-
 //Program Entry Point
 int main() 
 {
@@ -205,6 +205,9 @@ int main()
 	glfwSetCursorPosCallback(_pWindow, cursor_pos_callback);
 //	glfwSetMouseButtonCallback(_pWindow, mouse_button_callback);	//WE NEED TO ENABLE THIS FOR MOUSE CLICKS. It was a cheat way to make objects not selectable.
 
+	// Setup ImGui binding
+	ImGui_ImplGlfwGL3_Init(_pWindow, true);
+
 	VertexInit();
 
 	//Wireframe flag for debug and testing
@@ -216,8 +219,11 @@ int main()
 		//Check for any events and handle them
 		glfwPollEvents();
 
+		ImGui_ImplGlfwGL3_NewFrame();
+
 		//Update Elements and Render
 		UpdateMain();
+		ImGui::Render();
 
 		//Display the rendered buffer to the window
 		glfwSwapBuffers(_pWindow);
