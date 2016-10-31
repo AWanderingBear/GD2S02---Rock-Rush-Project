@@ -92,10 +92,10 @@ Scene * Game::LevelOne()
 	b2Body* playerOneBody = LevelOne->GetWorld()->CreateBody(&playerOneBodyDef);
 	
 	Player* pPlayer = new Player(ProgramManager["Ortho"], "Assets/Textures/awesomeface.png", SmallSquareVertices, Indices,
-		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerZeroBody /*,1 for collision (Shootables)*/);
+		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerZeroBody /*,1 for collision (Shootables)*/, 1);
 
 	Player* bPlayer = new Player(ProgramManager["Ortho"], "Assets/Textures/hexagon.png", SmallSquareVertices, Indices,
-		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerOneBody);
+		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerOneBody, 2);
 
 
 	//Define Shape
@@ -137,7 +137,7 @@ Scene * Game::LevelOne()
 	playerOneBody->CreateFixture(&fixtureDefBox);
 
 	//Background
-	LevelOne->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BackgroundSky.jpg", BackgroundVertices, Indices, 
+	LevelOne->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BackgroundSky2.jpg", BackgroundVertices, Indices, 
 		glm::vec3(1537, 384, -0.1), 0, GameCamera));
 
 	////Platforms
@@ -184,7 +184,6 @@ void Game::Update()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	Scenes[CurrentScene]->Update();
-
 
 	//Check if there is a special meteor, if not
 	//SpawnSpecialMeteor();

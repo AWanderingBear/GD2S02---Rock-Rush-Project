@@ -44,6 +44,7 @@ public:
 	void SetLaunchJoint(b2Joint* joint, int index);
 	b2Joint* GetLaunchJoint(int index);
 
+
 	void SetPrisma(b2Body* PrismaticBody, b2PrismaticJoint* PrismaticJoint);
 
 private:
