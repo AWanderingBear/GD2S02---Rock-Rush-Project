@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Dependencies\GLFW 3.2.1\include\GLFW;$(ProjectDir)Dependencies\glew-2.0.0\include\GL;$(ProjectDir)Dependencies\SOIL\include\src;$(ProjectDir)Dependencies\glm;$(ProjectDir)Dependencies;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Dependencies\GLFW 3.2.1\include\GLFW;$(ProjectDir)Dependencies\glew-2.0.0\include\GL;$(ProjectDir)Dependencies\SOIL\include\src;$(ProjectDir)Dependencies\glm;$(ProjectDir)Dependencies;$(ProjectDir);$(ProjectDir)Dependencies\ImGUI;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)Dependencies\GLFW 3.2.1\lib-vc2015;$(ProjectDir)Dependencies\glew-2.0.0\lib\Release\Win32;$(ProjectDir)Dependencies\SOIL\lib;$(ProjectDir)Dependencies\Box2D\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -156,6 +156,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="imgui.cpp" />
+    <ClCompile Include="imgui_demo.cpp" />
+    <ClCompile Include="imgui_draw.cpp" />
+    <ClCompile Include="imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="Meteor.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Shootable.cpp" />
@@ -171,6 +175,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="imconfig.h" />
+    <ClInclude Include="imgui.h" />
+    <ClInclude Include="imgui_impl_glfw_gl3.h" />
     <ClInclude Include="Meteor.h" />
     <ClInclude Include="MeteorCollisionHandler.h" />
     <ClInclude Include="Game.h" />

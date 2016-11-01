@@ -40,6 +40,8 @@ public:
 	void HandleKeyInput(int _key);
 	void HandleMenuKeyInput(int _key);
 
+	void EnableScore();
+
 	//std::vector<Player>GetPlayer();
 
 	void SetLaunchJoint(b2Joint* joint, int index);
@@ -76,6 +78,8 @@ private:
 	//Players
 	std::vector<Player*> Players;
 
+	bool DisplayScore = false; 
+
 	int P1Score;
 	int P2Score;
 	int P1FinalScore;
@@ -83,6 +87,5 @@ private:
 
 	Game* GameInstance;
 	int SwitchCount;
-
 };
 

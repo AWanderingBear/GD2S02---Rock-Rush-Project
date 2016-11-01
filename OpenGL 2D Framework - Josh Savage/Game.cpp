@@ -217,6 +217,8 @@ Scene * Game::LevelOne()
 	LevelOne->AddPlayer(bPlayer); 
 	//SpawnSpecialMeteor();
 
+	LevelOne->EnableScore();
+
 	return LevelOne;
 }
 
@@ -345,6 +347,22 @@ void Game::SpawnNormalMeteor()
 
 	//Change to meteor
 	currentScene->AddMeteor(meteor);
+}
+
+void Game::DrawScore(int P1Score, int P2Score)
+{
+	bool show = true;
+	ImGui::SetNextWindowPos(ImVec2(50, 20), ImGuiSetCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(200, 20), ImGuiSetCond_FirstUseEver);
+	ImGui::Begin("Player 1 Score:", &show);
+	ImGui::Text("%i", P1Score);
+	ImGui::End();
+
+	ImGui::SetNextWindowPos(ImVec2(300, 20), ImGuiSetCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(200, 20), ImGuiSetCond_FirstUseEver);
+	ImGui::Begin("Player 2 Score:", &show);
+	ImGui::Text("%i", P2Score);
+	ImGui::End();
 }
 
 void Game::SpawnSpecialMeteor()

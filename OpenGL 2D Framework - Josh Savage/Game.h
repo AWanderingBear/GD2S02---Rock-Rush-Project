@@ -3,9 +3,11 @@
 #include <vector>
 #include <map>
 
+
 //Local Includes
 #include "Scene.h"
 #include "ShaderLoader.h"
+#include "imgui.h"
 
 class Game
 {
@@ -29,6 +31,8 @@ public:
 
 	void SpawnSpecialMeteor();
 	void SpawnNormalMeteor();
+
+	void DrawScore(int P1Score, int P2Score);
 
 private:
 
