@@ -39,19 +39,14 @@ private:
 	Scene* LevelOne();
 	Scene* GameOver();
 	Scene* MainMenu();
+	Scene* Instructions();
 	//Scene* LevelTwo();
 
 	int CurrentScene = 0;
-
-
 
 	std::vector<Scene*> Scenes;
 	std::map<std::string, GLuint> ProgramManager;
 	ShaderLoader ProgramCreator;
 	GLFWwindow* m_Window;
-
-	
-	
-
 };
 

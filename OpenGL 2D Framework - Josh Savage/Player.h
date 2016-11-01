@@ -20,7 +20,7 @@ public:
 	GameAgent* GetCurrentlyHolding();
 
 	void Kill();
-
+	void ResetJumps();
 
 	bool underWater = false; 	//Sorry for bad code, I have no fucks to give at this point - Amber.
 private:

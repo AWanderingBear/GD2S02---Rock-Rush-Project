@@ -34,6 +34,14 @@ class MeteorCollisionHandler : public b2ContactListener
 				player->SetCurrentlyTouching(bodyAUserData);
 			}
 		}
+		else if (AType == 0)
+		{
+			if (BType == 8)
+			{
+				Player* player = (Player*)bodyBUserData;
+				player->ResetJumps();
+			}
+		}
 		else if (AType == 8) {
 			Player* player = (Player*)bodyAUserData;
 
@@ -45,6 +53,10 @@ class MeteorCollisionHandler : public b2ContactListener
 			{
 				SpecialMeteor* specialMeteor = (SpecialMeteor*)bodyBUserData;
 				player->SetCurrentlyTouching(bodyBUserData);
+			}
+			if (BType == 0)
+			{
+				player->ResetJumps();
 			}
 		}
 	}

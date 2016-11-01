@@ -24,7 +24,25 @@ void Scene::Update()
 {
 	if (P1Score > WinningScore || P2Score > WinningScore) {
 
-			GameInstance->NextScene();
+		for (int i = 0; i < (int)Players.size(); i++)
+		{
+			Player* Agent = Players[i];
+			if (i == 0)
+			{
+				Agent->GetPhysics()->SetTransform(b2Vec2(-3.2f, 15.0f), 0);
+				Agent->GetPhysics()->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+			}
+			else
+			{
+				Agent->GetPhysics()->SetTransform(b2Vec2(45.6f, 15.0f), 0);
+				Agent->GetPhysics()->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+			}
+		}
+		GameInstance->NextScene();
+		P1FinalScore = P1Score;
+		P2FinalScore = P2Score;
+		P1Score = 0;
+		P2Score = 0;
 	}
 
 	m_Camera->Update();
@@ -123,8 +141,15 @@ void Scene::Update()
 	}
 }
 
+int Scene::GetP1Score()
+{
+	return P1FinalScore;
+}
 
-
+int Scene::GetP2Score()
+{
+	return P2FinalScore;
+}
 void Scene::AddGameAgent(GameAgent* Adding)
 {
 
@@ -231,6 +256,10 @@ void Scene::HandleMenuKeyInput(int _key)
 {
 	if (_key == GLFW_KEY_ENTER)
 		GameInstance->NextScene();
+	if (_key == GLFW_KEY_SPACE)
+		GameInstance->GoToScene(3);
+	if (_key == GLFW_KEY_BACKSPACE)
+		GameInstance->GoToScene(0);
 }
 
 void Scene::HandleKeyInput(int _key)

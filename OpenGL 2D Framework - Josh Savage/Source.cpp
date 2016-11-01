@@ -147,7 +147,10 @@ void HandleInput() {
 
 	if (keys[GLFW_KEY_ENTER])
 		Test->HandleKeyInput(GLFW_KEY_ENTER);
-
+	if (keys[GLFW_KEY_SPACE])
+		Test->HandleKeyInput(GLFW_KEY_SPACE);
+	if (keys[GLFW_KEY_BACKSPACE])
+		Test->HandleKeyInput(GLFW_KEY_BACKSPACE);
 }
 
 //Updates

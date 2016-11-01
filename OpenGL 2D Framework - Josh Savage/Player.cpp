@@ -49,10 +49,6 @@ bool Player::Update(float deltaTime)
 		}
 	}
 
-	if (RemainingJumps < 6) {
-		RemainingJumps++;
-	}
-
 	return true;
 }
 
@@ -143,11 +139,16 @@ void Player::Move(int key)
 	}
 
 	if (key == GLFW_KEY_UP) {
-		if (RemainingJumps > 0) {
+		if (RemainingJumps > 0)
+		{
 			GameAgent::AddUpwardsVelocity(NormalizedSpeed);
 			RemainingJumps--;
 		}
 	}
+}
+void Player::ResetJumps()
+{
+	RemainingJumps = 6;
 }
 
 int Player::GetType()

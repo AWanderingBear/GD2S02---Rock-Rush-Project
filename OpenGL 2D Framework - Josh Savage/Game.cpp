@@ -25,7 +25,7 @@ Scene * Game::MainMenu()
 	Camera* GameCamera = new Camera(600.0f, glm::vec3(-150.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), m_Window);
 	Scene* MainMenu = new Scene(GameCamera, this, 3, 2);
 	//Background
-	MainMenu->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BackgroundSky2.jpg", BackgroundVertices, Indices,
+	MainMenu->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/MainMenuBackground.png", BackgroundVertices, Indices,
 		glm::vec3(1537, 384, -0.1), 0, GameCamera));
 
 	return MainMenu;
@@ -33,16 +33,28 @@ Scene * Game::MainMenu()
 
 Scene * Game::GameOver()
 {
+
 	Camera* GameCamera = new Camera(600.0f, glm::vec3(-150.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), m_Window);
 	Scene* GameOver = new Scene(GameCamera, this, 3, 2);
 	//Background
-	//GameOver->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BackgroundSky2.jpg", BackgroundVertices, Indices,
-	//	glm::vec3(1537, 384, -0.1), 0, GameCamera));
+	GameOver->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/GameOverBackground.jpg", BackgroundVertices, Indices,
+		glm::vec3(1537, 384, -0.1), 0, GameCamera));
+	int P1Score = GameOver->GetP1Score();
+	int P2Score = GameOver->GetP2Score();
 
 	return GameOver;
 }
 
+Scene * Game::Instructions()
+{
+	Camera* GameCamera = new Camera(600.0f, glm::vec3(-150.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), m_Window);
+	Scene* Instructions = new Scene(GameCamera, this, 3, 2);
+	//Background
+	Instructions->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/InstructionsBackground.jpg", BackgroundVertices, Indices,
+		glm::vec3(1537, 384, -0.1), 0, GameCamera));
 
+	return Instructions;
+}
 Scene * Game::LevelOne()
 {
 	//This method of creation is* horrific and should be handled in the constructor. Note for next time. 
@@ -51,13 +63,12 @@ Scene * Game::LevelOne()
 	Camera* GameCamera = new Camera(600.0f, glm::vec3(-150.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), m_Window);
 	Scene* LevelOne = new Scene(GameCamera, this, 3, 2);
 	LevelOne->GetWorld()->SetContactListener(new MeteorCollisionHandler());
-
 	// Define the ground
 	b2BodyDef mainPlatformBodyDef;
 	mainPlatformBodyDef.position.Set(20.8f, 20.0f); //*25			//Doesn't affect the way the object looks.
 	mainPlatformBodyDef.type = b2_staticBody;
 	b2Body* mainPlatformBody = LevelOne->GetWorld()->CreateBody(&mainPlatformBodyDef);
-	GameAgent* mainPlatformAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/wall.jpg", mainPlatformVertices, Indices,
+	GameAgent* mainPlatformAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BlueBrick.png", mainPlatformVertices, Indices,
 		glm::vec3(520, 500, 0), 0, GameCamera, mainPlatformBody, 0);	//DOES affect objects position, but y is oposite
 	//Shape the physics body
 	b2PolygonShape mainPlatformBox;
@@ -74,7 +85,7 @@ Scene * Game::LevelOne()
 	leftPlatformBodyDef.position.Set(-3.2f, 16.0f); //*25			//Doesn't affect the way the object looks.
 	leftPlatformBodyDef.type = b2_staticBody;
 	b2Body* leftPlatformBody = LevelOne->GetWorld()->CreateBody(&leftPlatformBodyDef);
-	GameAgent* leftPlatformAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/wall.jpg", startPlatformVertices, Indices,
+	GameAgent* leftPlatformAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BlueBrick.png", startPlatformVertices, Indices,
 		glm::vec3(-80, 400, 0), 0, GameCamera, leftPlatformBody, 0);	//DOES affect objects position, but y is oposite
 																		//Shape the physics body
 	b2PolygonShape leftPlatformBox;
@@ -90,7 +101,7 @@ Scene * Game::LevelOne()
 	rightPlatformBodyDef.position.Set(45.6f, 16.0f); //*25			//Doesn't affect the way the object looks.
 	rightPlatformBodyDef.type = b2_staticBody;
 	b2Body* rightPlatformBody = LevelOne->GetWorld()->CreateBody(&rightPlatformBodyDef);
-	GameAgent* rightPlatformAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/wall.jpg", startPlatformVertices, Indices,
+	GameAgent* rightPlatformAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BlueBrick.png", startPlatformVertices, Indices,
 		glm::vec3(1140, 400, 0), 0, GameCamera, rightPlatformBody, 0);	//DOES affect objects position, but y is oposite
 																		//Shape the physics body
 	b2PolygonShape rightPlatformBox;
@@ -100,24 +111,53 @@ Scene * Game::LevelOne()
 	rightPlatformFixture.userData = rightPlatformBody;
 	rightPlatformBody->CreateFixture(&rightPlatformFixture);
 
+	b2BodyDef leftWallBodyDef;
+	leftWallBodyDef.position.Set(-7.0f, 16.0f); //*25
+	leftWallBodyDef.type = b2_staticBody;
+	b2Body* leftWallBody = LevelOne->GetWorld()->CreateBody(&leftWallBodyDef);
+	GameAgent* leftWallAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BlueBrick.png", startPlatformVertices, Indices,
+		glm::vec3(-80, 400, 0), 0, GameCamera, leftWallBody, 5);
+	b2PolygonShape leftWallBox;
+	leftWallBox.SetAsBox(1.0f, 50.0f);
+	b2FixtureDef leftWallFixture;
+	leftWallFixture.shape = &leftWallBox;
+	leftWallFixture.userData = leftWallBody;
+	leftWallFixture.friction = 0.0f;
+	leftWallBody->CreateFixture(&leftWallFixture);
+
+	// Define the right wall.
+	b2BodyDef rightWallBodyDef;
+	rightWallBodyDef.position.Set(49.7f, 16.0f); //*25
+	rightWallBodyDef.type = b2_staticBody;
+	b2Body* rightWallBody = LevelOne->GetWorld()->CreateBody(&rightWallBodyDef);
+	GameAgent* rightWallAgent = new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BlueBrick.png", startPlatformVertices, Indices,
+		glm::vec3(-80, 400, 0), 0, GameCamera, rightWallBody, 5);
+	b2PolygonShape rightWallBox;
+	rightWallBox.SetAsBox(1.0f, 50.0f);
+	b2FixtureDef rightWallFixture;
+	rightWallFixture.shape = &rightWallBox;
+	rightWallFixture.userData = rightWallBody;
+	rightWallFixture.friction = 0.0f;
+	rightWallBody->CreateFixture(&rightWallFixture);
+
 	//Define the Box
 	b2BodyDef playerZeroBodyDef;
 	playerZeroBodyDef.type = b2_dynamicBody;
-	playerZeroBodyDef.position.Set(9.0f, 20.0f);	//Cannot set this to negative numbers D:
+	playerZeroBodyDef.position.Set(-3.2f, 15.0f);	//Cannot set this to negative numbers D:
 	playerZeroBodyDef.fixedRotation = true;
 
 	b2Body* playerZeroBody = LevelOne->GetWorld()->CreateBody(&playerZeroBodyDef);
 
 	b2BodyDef playerOneBodyDef;
 	playerOneBodyDef.type = b2_dynamicBody;
-	playerOneBodyDef.position.Set(33.0f, 20.0f);	//Cannot set this to negative numbers D:
+	playerOneBodyDef.position.Set(45.6f, 15.0f);	//Cannot set this to negative numbers D:
 	playerOneBodyDef.fixedRotation = true;
 	b2Body* playerOneBody = LevelOne->GetWorld()->CreateBody(&playerOneBodyDef);
 	
-	Player* pPlayer = new Player(ProgramManager["Ortho"], "Assets/Textures/awesomeface.png", SmallSquareVertices, Indices,
+	Player* pPlayer = new Player(ProgramManager["Ortho"], "Assets/Textures/BlueAstro_Idle.png", SmallSquareVertices, Indices,
 		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerZeroBody /*,1 for collision (Shootables)*/, 1);
 
-	Player* bPlayer = new Player(ProgramManager["Ortho"], "Assets/Textures/hexagon.png", SmallSquareVertices, Indices,
+	Player* bPlayer = new Player(ProgramManager["Ortho"], "Assets/Textures/OrangeAstro_Idle.png", SmallSquareVertices, Indices,
 		glm::vec3(0.0, 0.0, 0.0), 0, GameCamera, playerOneBody, 2);
 
 
@@ -160,13 +200,17 @@ Scene * Game::LevelOne()
 	playerOneBody->CreateFixture(&fixtureDefBox);
 
 	//Background
-	LevelOne->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/BackgroundSky2.jpg", BackgroundVertices, Indices, 
+	LevelOne->AddGameAgent(new GameAgent(ProgramManager["Ortho"], "Assets/Textures/StarBackground.png", BackgroundVertices, Indices, 
 		glm::vec3(1537, 384, -0.1), 0, GameCamera));
 
 	////Platforms
 	LevelOne->AddGameAgent(mainPlatformAgent);
 	LevelOne->AddGameAgent(leftPlatformAgent);
 	LevelOne->AddGameAgent(rightPlatformAgent);
+
+	//Walls
+	LevelOne->AddGameAgent(leftWallAgent);
+	LevelOne->AddGameAgent(rightWallAgent);
 
 	////Player Characters
 	LevelOne->AddPlayer(pPlayer);
@@ -184,7 +228,7 @@ void Game::Initialise()
 	Scenes.push_back(MainMenu());
 	Scenes.push_back(LevelOne());
 	Scenes.push_back(GameOver());
-
+	Scenes.push_back(Instructions());
 }
 
 void Game::Update()
@@ -196,7 +240,6 @@ void Game::Update()
 
 	if (CurrentScene == 1)
 	{
-
 		spawnNormalTimer -= deltaTime;
 		if (spawnNormalTimer <= 0.0f)
 		{
@@ -229,7 +272,6 @@ Scene* Game::GetCurrentScene()
 
 void Game::NextScene()
 {
-
 	if (!(CurrentScene == (int) Scenes.size() - 1)) {
 		CurrentScene += 1;
 	}
@@ -238,16 +280,15 @@ void Game::NextScene()
 
 void Game::GoToScene(int Scene)
 {
-
-	if (Scene > 0 && Scene < (int) Scenes.size()) {
-
+	if (Scene < (int) Scenes.size())
+	{
 		CurrentScene = Scene;
 	}
 }
 
 void Game::HandleClick(glm::vec2 mousePos)
 {
-		GetCurrentScene()->HandleClick(mousePos);
+	GetCurrentScene()->HandleClick(mousePos);
 }
 
 void Game::HandleRelease()
@@ -263,7 +304,7 @@ void Game::HandleMove(glm::vec2 mousePos)
 void Game::HandleKeyInput(int _key)
 {
 	int k = _key;
-	if (CurrentScene == 0 || CurrentScene == 2)
+	if (CurrentScene != 1)
 	{
 		GetCurrentScene()->HandleMenuKeyInput(_key);
 	}
@@ -289,7 +330,7 @@ void Game::SpawnNormalMeteor()
 
 	b2Body* meteorBody = currentScene->GetWorld()->CreateBody(&meteorBodyDef);
 
-	Meteor* meteor = new Meteor(ProgramManager["Ortho"], "Assets/Textures/BombBall.png", SmallSquareVertices, Indices,
+	Meteor* meteor = new Meteor(ProgramManager["Ortho"], "Assets/Textures/Meteor.png", SmallSquareVertices, Indices,
 		glm::vec3(0.0, 0.0, 0.0), 0, currentScene->GetCamera(), meteorBody /*,1 for collision (Shootables)*/);
 
 	b2CircleShape Circle;
@@ -321,7 +362,7 @@ void Game::SpawnSpecialMeteor()
 
 		b2Body* meteorBody = currentScene->GetWorld()->CreateBody(&meteorBodyDef);
 
-		SpecialMeteor* specialmeteor = new SpecialMeteor(ProgramManager["Ortho"], "Assets/Textures/robot.png", SmallSquareVertices, Indices,
+		SpecialMeteor* specialmeteor = new SpecialMeteor(ProgramManager["Ortho"], "Assets/Textures/Diamond Rock.png", SmallSquareVertices, Indices,
 			glm::vec3(0.0, 0.0, 0.0), 0, currentScene->GetCamera(), meteorBody /*,1 for collision (Shootables)*/);
 
 		b2CircleShape Circle;

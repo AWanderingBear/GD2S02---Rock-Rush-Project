@@ -26,8 +26,8 @@ public:
 	void AddMeteor(Meteor* Adding);
 	void AddSpecialMeteor(SpecialMeteor* Adding);
 	void AddPlayer(Player* Adding);
-
-
+	int GetP1Score();
+	int GetP2Score();
 
 	Player* GetPlayer(int player);
 	Camera* GetCamera();
@@ -78,6 +78,8 @@ private:
 
 	int P1Score;
 	int P2Score;
+	int P1FinalScore;
+	int P2FinalScore;
 
 	Game* GameInstance;
 	int SwitchCount;

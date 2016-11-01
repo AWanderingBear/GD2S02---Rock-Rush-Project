@@ -10,8 +10,8 @@ struct VertexStruct {
 
 std::vector<GLfloat> BackgroundVertices({
 	// Positions          // Colors           // Texture Coords
-	2049.0f,  384.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // Top Right
-	2049.0f, -384.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // Bottom Right
+	 10.0f,  384.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // Top Right
+	 10.0f, -384.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // Bottom Right
 	-2049.0f, -384.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // Bottom Left
 	-2049.0f,  384.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // Top Left 
 });
