@@ -58,6 +58,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		Test->Initialise();
 	}
 
+
+	
 	if (action == GLFW_PRESS)
 		keys[key] = true;
 	else if (action == GLFW_RELEASE)
@@ -206,7 +208,7 @@ int main()
 //	glfwSetMouseButtonCallback(_pWindow, mouse_button_callback);	//WE NEED TO ENABLE THIS FOR MOUSE CLICKS. It was a cheat way to make objects not selectable.
 
 	// Setup ImGui binding
-	ImGui_ImplGlfwGL3_Init(_pWindow, true);
+	ImGui_ImplGlfwGL3_Init(_pWindow, false);
 
 	VertexInit();
 
