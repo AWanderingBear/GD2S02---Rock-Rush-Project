@@ -91,7 +91,7 @@ void Scene::Update()
 			//Scoring
 			b2Vec2 Position = Agent->GetPhysics()->GetPosition();
 
-			if (Position.x > 400) {
+			if (Position.x > 0) {
 
 				//Player1 Scores
 				P1Score++;
@@ -293,13 +293,13 @@ void Scene::HandleKeyInput(int _key)
 		Players[1]->Move(GLFW_KEY_RIGHT);
 }
 
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
 void Scene::EnableScore()
 {
 	DisplayScore = true;
 }
->>>>>>> origin/Josh_Branch
+//>>>>>>> origin/Josh_Branch
 
 void Scene::SetLaunchJoint(b2Joint * joint, int index)
 {

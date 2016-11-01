@@ -317,8 +317,6 @@ void Game::HandleKeyInput(int _key)
 	
 }
 
-
-
 void Game::SpawnNormalMeteor()
 {
 	Scene* currentScene = GetCurrentScene();
